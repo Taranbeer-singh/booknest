@@ -1,0 +1,222 @@
+[
+  {
+    
+    "title": "Rich Dad Poor Dad",
+    "author": "Robert T. Kiyosaki",
+    "description": "A personal finance classic that explores different approaches to money, investing, financial independence, and building wealth.",
+    "category": "business",
+    "trending": true,
+    "coverImage": "book-1.png",
+    "oldPrice": 24.99,
+    "newPrice": 17.99
+  },
+  {
+    
+    "title": "The 48 Laws of Power",
+    "author": "Robert Greene",
+    "description": "An insightful exploration of power, influence, strategy, and human behavior through historical examples and practical principles.",
+    "category": "business",
+    "trending": true,
+    "coverImage": "book-2.png",
+    "oldPrice": 29.99,
+    "newPrice": 21.99
+  },
+  {
+    
+    "title": "Treasure Island",
+    "author": "Robert Louis Stevenson",
+    "description": "A classic adventure story filled with pirates, hidden treasure, danger, and unforgettable journeys across the sea.",
+    "category": "adventure",
+    "trending": true,
+    "coverImage": "book-3.png",
+    "oldPrice": 19.99,
+    "newPrice": 13.99
+  },
+  {
+    
+    "title": "The Sun and Her Flowers",
+    "author": "Rupi Kaur",
+    "description": "A collection of poetry exploring love, loss, healing, growth, relationships, and finding strength within yourself.",
+    "category": "poetry",
+    "trending": true,
+    "coverImage": "book-4.png",
+    "oldPrice": 18.99,
+    "newPrice": 12.99
+  },
+  {
+   
+    "title": "The Lean Startup",
+    "author": "Eric Ries",
+    "description": "A practical guide to building businesses through experimentation, continuous learning, customer feedback, and efficient innovation.",
+    "category": "business",
+    "trending": true,
+    "coverImage": "book-5.png",
+    "oldPrice": 27.99,
+    "newPrice": 19.99
+  },
+  {
+    
+    "title": "The Anxious Investor",
+    "author": "Scott Nations",
+    "description": "A practical look at investing psychology, uncertainty, risk, and strategies for making more confident financial decisions.",
+    "category": "business",
+    "trending": false,
+    "coverImage": "book-6.png",
+    "oldPrice": 25.99,
+    "newPrice": 18.99
+  },
+  {
+  
+    "title": "The Psychology of Money",
+    "author": "Morgan Housel",
+    "description": "A collection of stories and lessons about how emotions, behavior, and personal experiences influence the way people manage money.",
+    "category": "business",
+    "trending": true,
+    "coverImage": "book-7.png",
+    "oldPrice": 23.99,
+    "newPrice": 16.99
+  },
+  {
+   
+    "title": "Leaves of Grass",
+    "author": "Walt Whitman",
+    "description": "A landmark collection of poetry celebrating nature, individuality, humanity, freedom, and the beauty of everyday life.",
+    "category": "poetry",
+    "trending": false,
+    "coverImage": "book-8.png",
+    "oldPrice": 22.99,
+    "newPrice": 15.99
+  },
+  {
+    
+    "title": "Atomic Habits",
+    "author": "James Clear",
+    "description": "A practical guide to building good habits, breaking bad ones, and making small changes that lead to remarkable results.",
+    "category": "business",
+    "trending": true,
+    "coverImage": "book-9.png",
+    "oldPrice": 24.99,
+    "newPrice": 17.99
+  },
+  {
+  
+    "title": "The Call of the Wild",
+    "author": "Jack London",
+    "description": "An adventurous tale of survival and transformation following a dog as he discovers his instincts in the harsh wilderness.",
+    "category": "adventure",
+    "trending": true,
+    "coverImage": "book-10.png",
+    "oldPrice": 18.99,
+    "newPrice": 12.99
+  },
+  {
+   
+    "title": "Harry Potter and the Philosopher's Stone",
+    "author": "J.K. Rowling",
+    "description": "Harry Potter discovers a magical world and begins his first year at Hogwarts, where friendship, mystery, and adventure await him.",
+    "category": "fiction",
+    "trending": true,
+    "coverImage": "book-11.png",
+    "oldPrice": 29.99,
+    "newPrice": 21.99
+  },
+  {
+
+    "title": "Frankenstein",
+    "author": "Mary Shelley",
+    "description": "A timeless gothic novel about ambition, scientific discovery, responsibility, and the tragic consequences of creating life.",
+    "category": "horror",
+    "trending": true,
+    "coverImage": "book-12.png",
+    "oldPrice": 19.99,
+    "newPrice": 13.99
+  },
+  {
+
+    "title": "Pet Sematary",
+    "author": "Stephen King",
+    "description": "A chilling horror story about grief, loss, and the terrifying consequences of discovering a place where the dead can return.",
+    "category": "horror",
+    "trending": true,
+    "coverImage": "book-13.png",
+    "oldPrice": 27.99,
+    "newPrice": 19.99
+  },
+  {
+    
+    "title": "King Solomon's Mines",
+    "author": "H. Rider Haggard",
+    "description": "A classic adventure featuring a dangerous expedition into unexplored territory in search of legendary treasure and a lost kingdom.",
+    "category": "adventure",
+    "trending": false,
+    "coverImage": "book-14.png",
+    "oldPrice": 21.99,
+    "newPrice": 14.99
+  },
+  {
+  
+    "title": "The Alchemist",
+    "author": "Paulo Coelho",
+    "description": "The inspiring journey of Santiago, a young shepherd who follows his dreams in search of treasure and discovers his true purpose.",
+    "category": "fiction",
+    "trending": true,
+    "coverImage": "book-15.png",
+    "oldPrice": 22.99,
+    "newPrice": 15.99
+  },
+  {
+    
+    "title": "The Hobbit",
+    "author": "J.R.R. Tolkien",
+    "description": "Bilbo Baggins leaves his quiet life behind and joins an extraordinary adventure involving dwarves, dragons, treasure, and a dangerous journey.",
+    "category": "adventure",
+    "trending": true,
+    "coverImage": "book-16.png",
+    "oldPrice": 26.99,
+    "newPrice": 18.99
+  },
+  {
+    
+    "title": "The Collected Poems",
+    "author": "Sylvia Plath",
+    "description": "A powerful collection of poetry exploring identity, relationships, emotions, nature, and the complexities of the human experience.",
+    "category": "poetry",
+    "trending": false,
+    "coverImage": "book-17.png",
+    "oldPrice": 24.99,
+    "newPrice": 17.99
+  },
+  {
+
+    "title": "Dracula",
+    "author": "Bram Stoker",
+    "description": "A legendary gothic horror novel following Count Dracula and the terrifying events surrounding his attempt to spread his influence.",
+    "category": "horror",
+    "trending": true,
+    "coverImage": "book-18.png",
+    "oldPrice": 21.99,
+    "newPrice": 14.99
+  },
+  {
+
+    "title": "Journey to the Center of the Earth",
+    "author": "Jules Verne",
+    "description": "An exciting scientific adventure in which explorers journey deep beneath the Earth's surface and encounter extraordinary hidden worlds.",
+    "category": "adventure",
+    "trending": true,
+    "coverImage": "book-19.png",
+    "oldPrice": 20.99,
+    "newPrice": 14.99
+  },
+  {
+  
+    "title": "The Waste Land",
+    "author": "T. S. Eliot",
+    "description": "A landmark modernist poem exploring fragmentation, cultural change, memory, spirituality, and the uncertainty of the modern world.",
+    "category": "poetry",
+    "trending": false,
+    "coverImage": "book-20.png",
+    "oldPrice": 19.99,
+    "newPrice": 13.99
+  }
+]

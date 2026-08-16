@@ -6,8 +6,8 @@ const Book = require("./book.model");
 
 const postABook = async (req, res) => {
   try {
-    console.log("BODY:", req.body);
-    console.log("FILE:", req.file);
+    // console.log("BODY:", req.body);
+    // console.log("FILE:", req.file);
 
     // Check image
     if (!req.file) {

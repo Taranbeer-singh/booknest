@@ -90,8 +90,8 @@ const AddBook = () => {
       // Send the actual image file
       formData.append("coverImage", imageFile);
 
-      console.log("BOOK DATA:", data);
-      console.log("IMAGE FILE:", imageFile);
+      // console.log("BOOK DATA:", data);
+      // console.log("IMAGE FILE:", imageFile);
 
       // ==========================================
       // SEND BOOK + IMAGE TO BACKEND
@@ -99,7 +99,7 @@ const AddBook = () => {
 
       const response = await addBook(formData).unwrap();
 
-      console.log("BOOK ADDED:", response);
+      // console.log("BOOK ADDED:", response);
 
       await Swal.fire({
         title: "Book Added Successfully!",

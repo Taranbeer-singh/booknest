@@ -54,6 +54,6 @@ const bookSchema = new mongoose.Schema(
 
 const Book = mongoose.model("Book", bookSchema);
 
-console.log("BOOK MODEL ID OPTION:", bookSchema.options._id);
+// console.log("BOOK MODEL ID OPTION:", bookSchema.options._id);
 
 module.exports = Book;

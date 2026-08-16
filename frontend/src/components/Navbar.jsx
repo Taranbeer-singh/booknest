@@ -3,6 +3,8 @@ import {
   HiOutlineShoppingCart,
   HiOutlineUser,
   HiOutlineSearch,
+  HiOutlineMenu,
+  HiOutlineX,
 } from "react-icons/hi";
 import avtarImg from "../assets/avatar.png";
 import { useState } from "react";
@@ -24,6 +26,10 @@ const Navbar = () => {
   const [isDropdown, setIsDropdown] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [showSearchResults, setShowSearchResults] = useState(false);
+
+  // Mobile states
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
 
   const cartItems = useSelector((state) => state.cart.cartItems);
 
@@ -48,6 +54,7 @@ const Navbar = () => {
   const handleLogOut = () => {
     logout();
     setIsDropdown(false);
+    setIsMobileMenuOpen(false);
   };
 
   // ==========================================
@@ -75,7 +82,6 @@ const Navbar = () => {
   };
 
   const handleSearchBlur = () => {
-    // Small delay so clicking a search result works properly
     setTimeout(() => {
       setShowSearchResults(false);
     }, 200);
@@ -101,17 +107,17 @@ const Navbar = () => {
     { name: "Orders", path: "/orders" },
     { name: "About", path: "/about" },
     { name: "Features", path: "/landingpage" },
-    
   ];
 
   return (
     <header className="w-full bg-white border-b border-gray-100 sticky top-0 z-40">
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center gap-4">
+      <nav className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-20 flex items-center gap-2 sm:gap-4">
         {/* ================= LEFT : LOGO ================= */}
 
         <Link
           to="/"
-          className="flex items-center gap-3 shrink-0 group"
+          className="flex items-center gap-2 sm:gap-3 shrink-0 group"
+          onClick={() => setIsMobileMenuOpen(false)}
         >
           <motion.div
             whileHover={{ rotate: -8, scale: 1.05 }}
@@ -119,6 +125,8 @@ const Navbar = () => {
             className="
               w-11
               h-11
+              sm:w-11
+              sm:h-11
               rounded-2xl
               bg-gradient-to-br
               from-blue-600
@@ -148,7 +156,7 @@ const Navbar = () => {
           </div>
         </Link>
 
-        {/* ================= SEARCH ================= */}
+        {/* ================= DESKTOP SEARCH ================= */}
 
         <div className="hidden md:block flex-1 max-w-sm relative">
           <div className="relative group">
@@ -195,8 +203,6 @@ const Navbar = () => {
               "
             />
 
-            {/* Clear Search */}
-
             {searchTerm && (
               <button
                 type="button"
@@ -224,7 +230,7 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* ================= SEARCH RESULTS ================= */}
+          {/* DESKTOP SEARCH RESULTS */}
 
           <AnimatePresence>
             {showSearchResults && searchTerm.trim() && (
@@ -260,8 +266,6 @@ const Navbar = () => {
                   z-[100]
                 "
               >
-                {/* Loading */}
-
                 {booksLoading && (
                   <div className="p-5 text-center">
                     <div
@@ -283,13 +287,9 @@ const Navbar = () => {
                   </div>
                 )}
 
-                {/* API Error */}
-
                 {!booksLoading && booksError && (
                   <div className="p-5 text-center">
-                    <div className="text-2xl mb-2">
-                      ⚠️
-                    </div>
+                    <div className="text-2xl mb-2">⚠️</div>
 
                     <p className="text-sm font-semibold text-gray-700">
                       Unable to search books
@@ -300,8 +300,6 @@ const Navbar = () => {
                     </p>
                   </div>
                 )}
-
-                {/* Search Results */}
 
                 {!booksLoading &&
                   !booksError &&
@@ -325,8 +323,6 @@ const Navbar = () => {
                             last:border-b-0
                           "
                         >
-                          {/* Book Image */}
-
                           <div
                             className="
                               w-11
@@ -342,73 +338,37 @@ const Navbar = () => {
                             <img
                               src={getImgUrl(book?.coverImage)}
                               alt={book?.title || "Book"}
-                              className="
-                                w-full
-                                h-full
-                                object-contain
-                                p-1
-                              "
+                              className="w-full h-full object-contain p-1"
                             />
                           </div>
 
-                          {/* Book Information */}
-
                           <div className="min-w-0 flex-1">
-                            <p
-                              className="
-                                text-sm
-                                font-semibold
-                                text-gray-800
-                                truncate
-                              "
-                            >
+                            <p className="text-sm font-semibold text-gray-800 truncate">
                               {book?.title}
                             </p>
 
-                            <p
-                              className="
-                                text-xs
-                                text-gray-400
-                                truncate
-                                mt-0.5
-                              "
-                            >
+                            <p className="text-xs text-gray-400 truncate mt-0.5">
                               {book?.author || "Unknown Author"}
                             </p>
 
                             {book?.category && (
-                              <p
-                                className="
-                                  text-[11px]
-                                  text-blue-500
-                                  capitalize
-                                  mt-0.5
-                                "
-                              >
+                              <p className="text-[11px] text-blue-500 capitalize mt-0.5">
                                 {book.category}
                               </p>
                             )}
                           </div>
 
-                          {/* Arrow */}
-
-                          <span className="text-gray-300 text-lg">
-                            →
-                          </span>
+                          <span className="text-gray-300 text-lg">→</span>
                         </Link>
                       ))}
                     </div>
                   )}
 
-                {/* No Results */}
-
                 {!booksLoading &&
                   !booksError &&
                   searchResults.length === 0 && (
                     <div className="p-6 text-center">
-                      <div className="text-2xl mb-2">
-                        🔍
-                      </div>
+                      <div className="text-2xl mb-2">🔍</div>
 
                       <p className="text-sm font-semibold text-gray-700">
                         No books found
@@ -424,7 +384,7 @@ const Navbar = () => {
           </AnimatePresence>
         </div>
 
-        {/* ================= CENTER NAV ================= */}
+        {/* ================= DESKTOP CENTER NAV ================= */}
 
         <div className="hidden lg:flex items-center gap-1 bg-gray-100/70 p-1.5 rounded-2xl">
           {centerLinks.map((item) => {
@@ -464,8 +424,36 @@ const Navbar = () => {
 
         {/* ================= RIGHT ================= */}
 
-        <div className="flex items-center gap-2 sm:gap-3 ml-auto">
-          {/* Cart */}
+        <div className="flex items-center gap-1.5 sm:gap-3 ml-auto">
+          {/* ================= MOBILE SEARCH ================= */}
+
+          <button
+            type="button"
+            onClick={() => {
+              setIsMobileSearchOpen(!isMobileSearchOpen);
+              setIsMobileMenuOpen(false);
+            }}
+            className="
+              md:hidden
+              w-10
+              h-10
+              rounded-xl
+              bg-gray-100
+              hover:bg-blue-50
+              flex
+              items-center
+              justify-center
+              transition-colors
+            "
+          >
+            {isMobileSearchOpen ? (
+              <HiOutlineX className="w-5 h-5 text-gray-700" />
+            ) : (
+              <HiOutlineSearch className="w-5 h-5 text-gray-700" />
+            )}
+          </button>
+
+          {/* ================= CART ================= */}
 
           <Link to="/cart">
             <motion.div
@@ -473,9 +461,12 @@ const Navbar = () => {
               whileTap={{ scale: 0.95 }}
               className="
                 relative
-                w-11
-                h-11
-                rounded-2xl
+                w-10
+                h-10
+                sm:w-11
+                sm:h-11
+                rounded-xl
+                sm:rounded-2xl
                 bg-gray-100
                 hover:bg-blue-50
                 flex
@@ -515,7 +506,7 @@ const Navbar = () => {
             </motion.div>
           </Link>
 
-          {/* User */}
+          {/* ================= USER ================= */}
 
           {currentUser ? (
             <div className="relative">
@@ -552,7 +543,7 @@ const Navbar = () => {
                 </span>
               </motion.button>
 
-              {/* Dropdown */}
+              {/* DESKTOP ACCOUNT DROPDOWN */}
 
               <AnimatePresence>
                 {isDropdown && (
@@ -650,9 +641,9 @@ const Navbar = () => {
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.95 }}
                 className="
-                  w-11
-                  h-11
-                  rounded-2xl
+                  w-10
+                  h-10
+                  rounded-xl
                   bg-gray-100
                   hover:bg-blue-50
                   flex
@@ -661,12 +652,303 @@ const Navbar = () => {
                   transition-colors
                 "
               >
-                <HiOutlineUser className="w-5 h-5 text-gray-700 hover:text-blue-600" />
+                <HiOutlineUser className="w-5 h-5 text-gray-700" />
               </motion.div>
             </Link>
           )}
+
+          {/* ================= HAMBURGER ================= */}
+
+          <button
+            type="button"
+            onClick={() => {
+              setIsMobileMenuOpen(!isMobileMenuOpen);
+              setIsMobileSearchOpen(false);
+            }}
+            className="
+              lg:hidden
+              w-10
+              h-10
+              rounded-xl
+              bg-gray-100
+              hover:bg-blue-50
+              flex
+              items-center
+              justify-center
+              transition-colors
+            "
+          >
+            {isMobileMenuOpen ? (
+              <HiOutlineX className="w-5 h-5 text-gray-700" />
+            ) : (
+              <HiOutlineMenu className="w-5 h-5 text-gray-700" />
+            )}
+          </button>
         </div>
       </nav>
+
+      {/* ================================================= */}
+      {/* MOBILE SEARCH BAR */}
+      {/* ================================================= */}
+
+      <AnimatePresence>
+        {isMobileSearchOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden border-t border-gray-100 bg-white px-3 py-3"
+          >
+            <div className="relative">
+              <HiOutlineSearch
+                className="
+                  absolute
+                  left-4
+                  top-1/2
+                  -translate-y-1/2
+                  text-gray-400
+                  w-5
+                  h-5
+                "
+              />
+
+              <input
+                autoFocus
+                type="text"
+                value={searchTerm}
+                onChange={handleSearchChange}
+                placeholder="Search books, authors..."
+                className="
+                  w-full
+                  h-12
+                  pl-11
+                  pr-10
+                  rounded-2xl
+                  bg-gray-100
+                  border
+                  border-transparent
+                  outline-none
+                  text-sm
+                  text-gray-700
+                  placeholder:text-gray-400
+                  focus:bg-white
+                  focus:border-blue-200
+                  focus:ring-4
+                  focus:ring-blue-50
+                "
+              />
+
+              {searchTerm && (
+                <button
+                  type="button"
+                  onClick={clearSearch}
+                  className="
+                    absolute
+                    right-3
+                    top-1/2
+                    -translate-y-1/2
+                    w-7
+                    h-7
+                    rounded-full
+                    bg-gray-200
+                    text-gray-500
+                    flex
+                    items-center
+                    justify-center
+                  "
+                >
+                  ×
+                </button>
+              )}
+            </div>
+
+            {/* MOBILE SEARCH RESULTS */}
+
+            {searchTerm.trim() && (
+              <div className="mt-2 bg-white rounded-2xl border border-gray-100 shadow-lg overflow-hidden">
+                {booksLoading && (
+                  <div className="p-5 text-center text-sm text-gray-400">
+                    Searching books...
+                  </div>
+                )}
+
+                {!booksLoading &&
+                  !booksError &&
+                  searchResults.length > 0 && (
+                    <div className="max-h-72 overflow-y-auto">
+                      {searchResults.slice(0, 6).map((book) => (
+                        <Link
+                          key={book?._id}
+                          to={`/books/${book?._id}`}
+                          onClick={() => {
+                            clearSearch();
+                            setIsMobileSearchOpen(false);
+                          }}
+                          className="
+                            flex
+                            items-center
+                            gap-3
+                            p-3
+                            border-b
+                            border-gray-50
+                            last:border-b-0
+                            hover:bg-blue-50
+                          "
+                        >
+                          <div className="w-10 h-12 rounded-lg bg-gray-50 overflow-hidden flex-shrink-0">
+                            <img
+                              src={getImgUrl(book?.coverImage)}
+                              alt={book?.title || "Book"}
+                              className="w-full h-full object-contain p-1"
+                            />
+                          </div>
+
+                          <div className="min-w-0 flex-1">
+                            <p className="text-sm font-semibold text-gray-800 truncate">
+                              {book?.title}
+                            </p>
+
+                            <p className="text-xs text-gray-400 truncate">
+                              {book?.author || "Unknown Author"}
+                            </p>
+                          </div>
+
+                          <span className="text-gray-300">→</span>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+
+                {!booksLoading &&
+                  !booksError &&
+                  searchResults.length === 0 && (
+                    <div className="p-5 text-center">
+                      <p className="text-sm font-semibold text-gray-700">
+                        No books found
+                      </p>
+
+                      <p className="text-xs text-gray-400 mt-1">
+                        Try another title or author.
+                      </p>
+                    </div>
+                  )}
+              </div>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ================================================= */}
+      {/* MOBILE MENU */}
+      {/* ================================================= */}
+
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="
+              lg:hidden
+              border-t
+              border-gray-100
+              bg-white
+              shadow-lg
+            "
+          >
+            <div className="p-3">
+              {/* Main Navigation */}
+
+              <div className="space-y-1">
+                {centerLinks.map((item) => {
+                  const isActive = location.pathname === item.path;
+
+                  return (
+                    <Link
+                      key={item.name}
+                      to={item.path}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={`
+                        flex
+                        items-center
+                        justify-between
+                        px-4
+                        py-3
+                        rounded-xl
+                        text-sm
+                        font-semibold
+                        transition-colors
+                        ${
+                          isActive
+                            ? "bg-blue-50 text-blue-600"
+                            : "text-gray-600 hover:bg-gray-50"
+                        }
+                      `}
+                    >
+                      {item.name}
+
+                      <span className="text-gray-300">→</span>
+                    </Link>
+                  );
+                })}
+              </div>
+
+              {/* Account Links */}
+
+              {currentUser && (
+                <>
+                  <div className="my-3 border-t border-gray-100" />
+
+                  <p className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-gray-400">
+                    My Account
+                  </p>
+
+                  {navigation.map((item) => (
+                    <Link
+                      key={item.name}
+                      to={item.href}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="
+                        flex
+                        items-center
+                        px-4
+                        py-3
+                        rounded-xl
+                        text-sm
+                        font-medium
+                        text-gray-600
+                        hover:bg-blue-50
+                        hover:text-blue-600
+                      "
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+
+                  <button
+                    onClick={handleLogOut}
+                    className="
+                      w-full
+                      text-left
+                      px-4
+                      py-3
+                      mt-1
+                      rounded-xl
+                      text-sm
+                      font-medium
+                      text-red-500
+                      hover:bg-red-50
+                    "
+                  >
+                    Logout
+                  </button>
+                </>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 };

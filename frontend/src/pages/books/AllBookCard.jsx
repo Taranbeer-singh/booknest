@@ -9,9 +9,18 @@ import {
   removeFromWishlist,
 } from "../../redux/features/wishlist/wishlistSlice";
 import { motion } from "framer-motion";
+import Swal from "sweetalert2";
 
 const AllBookCard = ({ book }) => {
   const dispatch = useDispatch();
+
+  // ================= CART =================
+
+  const cartItems = useSelector(
+    (state) => state.cart?.cartItems || []
+  );
+
+  // ================= WISHLIST =================
 
   const wishlistItems = useSelector(
     (state) => state.wishlist?.wishlistItems || []
@@ -21,9 +30,41 @@ const AllBookCard = ({ book }) => {
     (item) => item._id === book?._id
   );
 
+  const isInCart = cartItems.some(
+    (item) => item._id === book?._id
+  );
+
+  // ================= ADD TO CART =================
+
   const handleAddToCart = (product) => {
+    if (isInCart) {
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "info",
+        title: "Already in cart",
+        showConfirmButton: false,
+        timer: 1500,
+        timerProgressBar: true,
+      });
+
+      return;
+    }
+
     dispatch(addToCart(product));
+
+    Swal.fire({
+      toast: true,
+      position: "top-end",
+      icon: "success",
+      title: "Added to cart",
+      showConfirmButton: false,
+      timer: 1500,
+      timerProgressBar: true,
+    });
   };
+
+  // ================= WISHLIST =================
 
   const handleWishlist = () => {
     if (isWishlisted) {
@@ -51,6 +92,7 @@ const AllBookCard = ({ book }) => {
       whileHover={{ y: -5 }}
     >
       {/* ================= IMAGE ================= */}
+
       <div className="relative h-72 bg-gray-50 overflow-hidden">
         <Link to={`/books/${book?._id}`}>
           <motion.img
@@ -63,6 +105,7 @@ const AllBookCard = ({ book }) => {
         </Link>
 
         {/* ================= WISHLIST BUTTON ================= */}
+
         <motion.button
           type="button"
           onClick={handleWishlist}
@@ -117,6 +160,7 @@ const AllBookCard = ({ book }) => {
         </motion.button>
 
         {/* ================= CATEGORY ================= */}
+
         {book?.category && (
           <span
             className="
@@ -141,8 +185,11 @@ const AllBookCard = ({ book }) => {
       </div>
 
       {/* ================= CONTENT ================= */}
+
       <div className="p-5">
+
         {/* Title */}
+
         <Link to={`/books/${book?._id}`}>
           <h3
             className="
@@ -160,6 +207,7 @@ const AllBookCard = ({ book }) => {
         </Link>
 
         {/* Author */}
+
         {book?.author && (
           <p className="text-sm text-gray-400 mb-2">
             by {book.author}
@@ -167,6 +215,7 @@ const AllBookCard = ({ book }) => {
         )}
 
         {/* Description */}
+
         <p className="text-sm text-gray-500 leading-5 min-h-[40px] mb-4">
           {book?.description?.length > 55
             ? `${book.description.slice(0, 55)}.....`
@@ -174,6 +223,7 @@ const AllBookCard = ({ book }) => {
         </p>
 
         {/* Price */}
+
         <div className="flex items-center gap-3 mb-5">
           <span className="text-lg font-bold text-gray-900">
             ${book?.newPrice}
@@ -186,7 +236,8 @@ const AllBookCard = ({ book }) => {
           )}
         </div>
 
-        {/* Add To Cart */}
+        {/* ================= ADD TO CART ================= */}
+
         <motion.button
           type="button"
           onClick={() => handleAddToCart(book)}
@@ -214,7 +265,8 @@ const AllBookCard = ({ book }) => {
           }}
         >
           <FiShoppingCart className="text-lg" />
-          Add to Cart
+
+          {isInCart ? "In Cart" : "Add to Cart"}
         </motion.button>
       </div>
     </motion.div>

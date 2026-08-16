@@ -11,24 +11,55 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../redux/features/cart/cartSlice";
 import { toggleWishlist } from "../../redux/features/wishlist/wishlistSlice";
 import { motion } from "framer-motion";
+import Swal from "sweetalert2";
 
 const BookCard = ({ book }) => {
   const dispatch = useDispatch();
 
-  // ==========================================
-  // CART
-  // ==========================================
+  // ================= CART =================
+
+  const cartItems = useSelector(
+    (state) => state.cart?.cartItems || []
+  );
+
+  const isInCart = cartItems.some(
+    (item) => item._id === book?._id
+  );
+
+  // ================= ADD TO CART =================
 
   const handleAddToCart = (product) => {
+    if (isInCart) {
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "info",
+        title: "Already in cart",
+        showConfirmButton: false,
+        timer: 1500,
+        timerProgressBar: true,
+      });
+
+      return;
+    }
+
     dispatch(addToCart(product));
+
+    Swal.fire({
+      toast: true,
+      position: "top-end",
+      icon: "success",
+      title: "Added to cart",
+      showConfirmButton: false,
+      timer: 1500,
+      timerProgressBar: true,
+    });
   };
 
-  // ==========================================
-  // WISHLIST
-  // ==========================================
+  // ================= WISHLIST =================
 
   const wishlistItems = useSelector(
-    (state) => state.wishlist.wishlistItems
+    (state) => state.wishlist?.wishlistItems || []
   );
 
   const isWishlisted = wishlistItems.some(
@@ -306,7 +337,9 @@ const BookCard = ({ book }) => {
         >
           <FiShoppingCart className="text-lg" />
 
-          <span>Add to Cart</span>
+          <span>
+            {isInCart ? "In Cart" : "Add to Cart"}
+          </span>
         </motion.button>
       </div>
     </motion.div>

@@ -8,6 +8,7 @@ import {
   FiTrash2,
   FiArrowRight,
 } from "react-icons/fi";
+import Swal from "sweetalert2";
 
 import { getImgUrl } from "../../utils/getImgUrl";
 
@@ -21,6 +22,14 @@ import {
 const WishlistPage = () => {
   const dispatch = useDispatch();
 
+  // ================= CART =================
+
+  const cartItems = useSelector(
+    (state) => state.cart?.cartItems || []
+  );
+
+  // ================= WISHLIST =================
+
   const wishlistItems = useSelector(
     (state) => state.wishlist?.wishlistItems || []
   );
@@ -28,7 +37,35 @@ const WishlistPage = () => {
   // ================= ADD TO CART =================
 
   const handleAddToCart = (book) => {
+    const isInCart = cartItems.some(
+      (item) => item._id === book?._id
+    );
+
+    if (isInCart) {
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "info",
+        title: "Already in cart",
+        showConfirmButton: false,
+        timer: 1500,
+        timerProgressBar: true,
+      });
+
+      return;
+    }
+
     dispatch(addToCart(book));
+
+    Swal.fire({
+      toast: true,
+      position: "top-end",
+      icon: "success",
+      title: "Added to cart",
+      showConfirmButton: false,
+      timer: 1500,
+      timerProgressBar: true,
+    });
   };
 
   // ================= REMOVE =================
@@ -146,8 +183,6 @@ const WishlistPage = () => {
             px-6
           "
         >
-          {/* Heart */}
-
           <motion.div
             animate={{
               y: [0, -8, 0],
@@ -217,8 +252,6 @@ const WishlistPage = () => {
           </Link>
         </motion.div>
       ) : (
-        /* ================= WISHLIST CONTENT ================= */
-
         <motion.div
           className="
             grid
@@ -239,218 +272,227 @@ const WishlistPage = () => {
             },
           }}
         >
-          {wishlistItems.map((book) => (
-            <motion.div
-              key={book?._id}
-              variants={{
-                hidden: {
-                  opacity: 0,
-                  y: 20,
-                },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                },
-              }}
-              transition={{
-                duration: 0.4,
-              }}
-              whileHover={{
-                y: -5,
-              }}
-              className="
-                group
-                bg-white
-                rounded-2xl
-                border
-                border-gray-100
-                shadow-sm
-                hover:shadow-xl
-                overflow-hidden
-                transition-all
-                duration-300
-              "
-            >
-              {/* ================= IMAGE ================= */}
+          {wishlistItems.map((book) => {
+            const isInCart = cartItems.some(
+              (item) => item._id === book?._id
+            );
 
-              <div className="relative h-72 bg-gray-50 flex items-center justify-center overflow-hidden">
-                <Link
-                  to={`/books/${book?._id}`}
-                  className="w-full h-full flex items-center justify-center"
-                >
-                  <motion.img
-                    src={getImgUrl(book?.coverImage)}
-                    alt={book?.title || "Book"}
-                    className="
-                      w-full
-                      h-full
-                      object-contain
-                      p-5
-                    "
-                    whileHover={{
-                      scale: 1.06,
-                    }}
-                    transition={{
-                      duration: 0.3,
-                    }}
-                  />
-                </Link>
+            return (
+              <motion.div
+                key={book?._id}
+                variants={{
+                  hidden: {
+                    opacity: 0,
+                    y: 20,
+                  },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                  },
+                }}
+                transition={{
+                  duration: 0.4,
+                }}
+                whileHover={{
+                  y: -5,
+                }}
+                className="
+                  group
+                  bg-white
+                  rounded-2xl
+                  border
+                  border-gray-100
+                  shadow-sm
+                  hover:shadow-xl
+                  overflow-hidden
+                  transition-all
+                  duration-300
+                "
+              >
+                {/* IMAGE */}
 
-                {/* Wishlist Heart */}
-
-                <motion.button
-                  type="button"
-                  onClick={() => handleRemove(book)}
-                  whileHover={{
-                    scale: 1.1,
-                  }}
-                  whileTap={{
-                    scale: 0.9,
-                  }}
-                  className="
-                    absolute
-                    top-4
-                    right-4
-                    w-10
-                    h-10
-                    rounded-full
-                    bg-white
-                    text-red-500
-                    shadow-md
-                    flex
-                    items-center
-                    justify-center
-                    cursor-pointer
-                    hover:bg-red-50
-                    transition-colors
-                  "
-                  title="Remove from wishlist"
-                >
-                  <FiHeart
-                    className="text-lg"
-                    fill="currentColor"
-                  />
-                </motion.button>
-              </div>
-
-              {/* ================= DETAILS ================= */}
-
-              <div className="p-5">
-                {/* Category */}
-
-                <p className="text-xs font-semibold uppercase tracking-wider text-blue-500 mb-2">
-                  {book?.category || "Book"}
-                </p>
-
-                {/* Title */}
-
-                <Link to={`/books/${book?._id}`}>
-                  <h2
-                    className="
-                      text-lg
-                      font-bold
-                      text-gray-800
-                      line-clamp-2
-                      hover:text-blue-600
-                      transition-colors
-                    "
+                <div className="relative h-72 bg-gray-50 flex items-center justify-center overflow-hidden">
+                  <Link
+                    to={`/books/${book?._id}`}
+                    className="w-full h-full flex items-center justify-center"
                   >
-                    {book?.title}
-                  </h2>
-                </Link>
+                    <motion.img
+                      src={getImgUrl(book?.coverImage)}
+                      alt={book?.title || "Book"}
+                      className="
+                        w-full
+                        h-full
+                        object-contain
+                        p-5
+                      "
+                      whileHover={{
+                        scale: 1.06,
+                      }}
+                      transition={{
+                        duration: 0.3,
+                      }}
+                    />
+                  </Link>
 
-                {/* Author */}
-
-                <p className="text-sm text-gray-500 mt-2">
-                  By{" "}
-                  <span className="font-medium text-gray-700">
-                    {book?.author || "Unknown Author"}
-                  </span>
-                </p>
-
-                {/* Price */}
-
-                <div className="flex items-center gap-3 mt-4">
-                  <span className="text-xl font-bold text-blue-600">
-                    ${book?.newPrice}
-                  </span>
-
-                  {book?.oldPrice && (
-                    <span className="text-sm text-gray-400 line-through">
-                      ${book?.oldPrice}
-                    </span>
-                  )}
-                </div>
-
-                {/* ================= ACTIONS ================= */}
-
-                <div className="flex gap-2 mt-5">
-                  {/* Add Cart */}
-
-                  <motion.button
-                    type="button"
-                    onClick={() => handleAddToCart(book)}
-                    whileHover={{
-                      scale: 1.02,
-                    }}
-                    whileTap={{
-                      scale: 0.97,
-                    }}
-                    className="
-                      flex-1
-                      flex
-                      items-center
-                      justify-center
-                      gap-2
-                      bg-blue-600
-                      hover:bg-blue-700
-                      text-white
-                      py-3
-                      rounded-xl
-                      font-semibold
-                      text-sm
-                      shadow-sm
-                      cursor-pointer
-                      transition-colors
-                    "
-                  >
-                    <FiShoppingCart />
-                    Add to Cart
-                  </motion.button>
-
-                  {/* Remove */}
+                  {/* Wishlist Heart */}
 
                   <motion.button
                     type="button"
                     onClick={() => handleRemove(book)}
                     whileHover={{
-                      scale: 1.03,
+                      scale: 1.1,
                     }}
                     whileTap={{
-                      scale: 0.97,
+                      scale: 0.9,
                     }}
                     className="
-                      w-12
-                      rounded-xl
-                      border
-                      border-red-100
-                      bg-red-50
+                      absolute
+                      top-4
+                      right-4
+                      w-10
+                      h-10
+                      rounded-full
+                      bg-white
                       text-red-500
+                      shadow-md
                       flex
                       items-center
                       justify-center
                       cursor-pointer
-                      hover:bg-red-100
+                      hover:bg-red-50
                       transition-colors
                     "
-                    title="Remove"
+                    title="Remove from wishlist"
                   >
-                    <FiTrash2 />
+                    <FiHeart
+                      className="text-lg"
+                      fill="currentColor"
+                    />
                   </motion.button>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+
+                {/* DETAILS */}
+
+                <div className="p-5">
+
+                  {/* Category */}
+
+                  <p className="text-xs font-semibold uppercase tracking-wider text-blue-500 mb-2">
+                    {book?.category || "Book"}
+                  </p>
+
+                  {/* Title */}
+
+                  <Link to={`/books/${book?._id}`}>
+                    <h2
+                      className="
+                        text-lg
+                        font-bold
+                        text-gray-800
+                        line-clamp-2
+                        hover:text-blue-600
+                        transition-colors
+                      "
+                    >
+                      {book?.title}
+                    </h2>
+                  </Link>
+
+                  {/* Author */}
+
+                  <p className="text-sm text-gray-500 mt-2">
+                    By{" "}
+                    <span className="font-medium text-gray-700">
+                      {book?.author || "Unknown Author"}
+                    </span>
+                  </p>
+
+                  {/* Price */}
+
+                  <div className="flex items-center gap-3 mt-4">
+                    <span className="text-xl font-bold text-blue-600">
+                      ${book?.newPrice}
+                    </span>
+
+                    {book?.oldPrice && (
+                      <span className="text-sm text-gray-400 line-through">
+                        ${book?.oldPrice}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* ACTIONS */}
+
+                  <div className="flex gap-2 mt-5">
+
+                    {/* ADD CART */}
+
+                    <motion.button
+                      type="button"
+                      onClick={() => handleAddToCart(book)}
+                      whileHover={{
+                        scale: 1.02,
+                      }}
+                      whileTap={{
+                        scale: 0.97,
+                      }}
+                      className="
+                        flex-1
+                        flex
+                        items-center
+                        justify-center
+                        gap-2
+                        bg-blue-600
+                        hover:bg-blue-700
+                        text-white
+                        py-3
+                        rounded-xl
+                        font-semibold
+                        text-sm
+                        shadow-sm
+                        cursor-pointer
+                        transition-colors
+                      "
+                    >
+                      <FiShoppingCart />
+
+                      {isInCart ? "In Cart" : "Add to Cart"}
+                    </motion.button>
+
+                    {/* REMOVE */}
+
+                    <motion.button
+                      type="button"
+                      onClick={() => handleRemove(book)}
+                      whileHover={{
+                        scale: 1.03,
+                      }}
+                      whileTap={{
+                        scale: 0.97,
+                      }}
+                      className="
+                        w-12
+                        rounded-xl
+                        border
+                        border-red-100
+                        bg-red-50
+                        text-red-500
+                        flex
+                        items-center
+                        justify-center
+                        cursor-pointer
+                        hover:bg-red-100
+                        transition-colors
+                      "
+                      title="Remove"
+                    >
+                      <FiTrash2 />
+                    </motion.button>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
         </motion.div>
       )}
     </motion.main>

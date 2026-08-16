@@ -28,28 +28,40 @@ const SingleBook = () => {
   const dispatch = useDispatch();
   const { currentUser } = useAuth();
 
-  // BOOK
+  // ================= BOOK =================
+
   const {
     data: book,
     isLoading,
     isError,
-  } = useFetchBookByIdQuery(id, { skip: !id });
+  } = useFetchBookByIdQuery(id, {
+    skip: !id,
+  });
 
-  // REVIEWS
-  const { data: reviews = [], isLoading: reviewsLoading } =
-    useGetBookReviewsQuery(id, { skip: !id });
+  // ================= REVIEWS =================
+
+  const {
+    data: reviews = [],
+    isLoading: reviewsLoading,
+  } = useGetBookReviewsQuery(id, {
+    skip: !id,
+  });
 
   const [addReview, { isLoading: isSubmitting }] =
     useAddReviewMutation();
 
   const [deleteReview] = useDeleteReviewMutation();
 
-  // REVIEW FORM
+  // ================= REVIEW FORM =================
+
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
 
-  // ADD TO CART
+  // ================= ADD TO CART =================
+
   const handleAddToCart = (product) => {
+    if (!product) return;
+
     dispatch(addToCart(product));
 
     Swal.fire({
@@ -57,13 +69,15 @@ const SingleBook = () => {
       position: "top-end",
       icon: "success",
       title: "Added to cart",
+      text: `${product.title || "Book"} has been added to your cart.`,
       showConfirmButton: false,
-      timer: 1500,
+      timer: 1600,
       timerProgressBar: true,
     });
   };
 
-  // SUBMIT REVIEW
+  // ================= SUBMIT REVIEW =================
+
   const handleSubmitReview = async (e) => {
     e.preventDefault();
 
@@ -90,17 +104,22 @@ const SingleBook = () => {
     try {
       await addReview({
         bookId: id,
+
         userId:
           currentUser.uid ||
           currentUser._id ||
           currentUser.email,
+
         userName:
           currentUser.displayName ||
           currentUser.name ||
           currentUser.email?.split("@")[0] ||
           "User",
+
         userEmail: currentUser.email,
+
         rating,
+
         comment: comment.trim(),
       }).unwrap();
 
@@ -114,6 +133,7 @@ const SingleBook = () => {
         title: "Review added",
         showConfirmButton: false,
         timer: 1600,
+        timerProgressBar: true,
       });
     } catch (error) {
       console.error("Review error:", error);
@@ -130,7 +150,8 @@ const SingleBook = () => {
     }
   };
 
-  // DELETE REVIEW
+  // ================= DELETE REVIEW =================
+
   const handleDeleteReview = async (reviewId) => {
     const result = await Swal.fire({
       icon: "warning",
@@ -156,6 +177,7 @@ const SingleBook = () => {
         title: "Review deleted",
         showConfirmButton: false,
         timer: 1500,
+        timerProgressBar: true,
       });
     } catch (error) {
       console.error("Delete review error:", error);
@@ -170,7 +192,8 @@ const SingleBook = () => {
     }
   };
 
-  // LOADING
+  // ================= LOADING =================
+
   if (isLoading) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center text-gray-500">
@@ -179,7 +202,8 @@ const SingleBook = () => {
     );
   }
 
-  // ERROR
+  // ================= ERROR =================
+
   if (isError) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center text-center">
@@ -187,6 +211,7 @@ const SingleBook = () => {
           <h2 className="text-2xl font-bold text-gray-800">
             Error loading book
           </h2>
+
           <p className="text-gray-500 mt-2">
             Something went wrong while loading this book.
           </p>
@@ -195,7 +220,8 @@ const SingleBook = () => {
     );
   }
 
-  // NOT FOUND
+  // ================= NOT FOUND =================
+
   if (!book) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center text-center">
@@ -215,56 +241,130 @@ const SingleBook = () => {
     );
   }
 
-  // AVERAGE RATING
+  // ================= AVERAGE RATING =================
+
   const averageRating =
     reviews.length > 0
       ? (
           reviews.reduce(
-            (sum, review) => sum + Number(review.rating || 0),
+            (sum, review) =>
+              sum + Number(review.rating || 0),
             0
           ) / reviews.length
         ).toFixed(1)
       : "0.0";
 
+  // ================= UI =================
+
   return (
     <motion.main
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{
+        opacity: 0,
+        y: 20,
+      }}
+      animate={{
+        opacity: 1,
+        y: 0,
+      }}
       className="max-w-6xl mx-auto px-6 py-10"
     >
-      {/* BACK */}
+      {/* ================= BACK ================= */}
+
       <Link
         to="/all-books"
-        className="inline-flex items-center gap-2 text-gray-500 hover:text-blue-600 mb-7"
+        className="
+          inline-flex
+          items-center
+          gap-2
+          text-gray-500
+          hover:text-blue-600
+          mb-7
+        "
       >
         <FiArrowLeft />
         Back to books
       </Link>
 
-      {/* BOOK */}
-      <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
+      {/* ================= BOOK ================= */}
+
+      <div
+        className="
+          bg-white
+          rounded-3xl
+          border
+          border-gray-100
+          shadow-sm
+          overflow-hidden
+        "
+      >
         <div className="grid md:grid-cols-2 gap-10 p-6 md:p-10">
 
-          {/* IMAGE */}
-          <div className="flex items-center justify-center bg-gray-50 rounded-2xl min-h-[420px] overflow-hidden">
+          {/* ================= IMAGE ================= */}
+
+          <div
+            className="
+              flex
+              items-center
+              justify-center
+              bg-gray-50
+              rounded-2xl
+              min-h-[420px]
+              overflow-hidden
+            "
+          >
             <motion.img
               src={getImgUrl(book.coverImage)}
               alt={book.title}
-              className="max-w-[80%] max-h-[440px] object-contain drop-shadow-xl"
-              whileHover={{ scale: 1.04 }}
+              className="
+                max-w-[80%]
+                max-h-[440px]
+                object-contain
+                drop-shadow-xl
+              "
+              whileHover={{
+                scale: 1.04,
+              }}
             />
           </div>
 
-          {/* DETAILS */}
+          {/* ================= DETAILS ================= */}
+
           <div className="flex flex-col justify-center">
 
-            <span className="self-start bg-blue-50 text-blue-600 px-4 py-1.5 rounded-full text-sm font-semibold capitalize mb-4">
+            {/* CATEGORY */}
+
+            <span
+              className="
+                self-start
+                bg-blue-50
+                text-blue-600
+                px-4
+                py-1.5
+                rounded-full
+                text-sm
+                font-semibold
+                capitalize
+                mb-4
+              "
+            >
               {book.category || "Book"}
             </span>
 
-            <h1 className="text-3xl md:text-5xl font-bold text-slate-800 leading-tight">
+            {/* TITLE */}
+
+            <h1
+              className="
+                text-3xl
+                md:text-5xl
+                font-bold
+                text-slate-800
+                leading-tight
+              "
+            >
               {book.title}
             </h1>
+
+            {/* AUTHOR */}
 
             <p className="text-gray-500 mt-4 text-lg">
               By{" "}
@@ -273,8 +373,10 @@ const SingleBook = () => {
               </span>
             </p>
 
-            {/* PRICE */}
+            {/* ================= PRICE ================= */}
+
             <div className="flex items-center gap-4 mt-6">
+
               <span className="text-3xl font-bold text-blue-600">
                 ${book.newPrice}
               </span>
@@ -284,21 +386,29 @@ const SingleBook = () => {
                   ${book.oldPrice}
                 </span>
               )}
+
             </div>
 
-            {/* RATING */}
+            {/* ================= RATING ================= */}
+
             <div className="flex items-center gap-3 mt-5">
+
               <div className="flex gap-1">
+
                 {[1, 2, 3, 4, 5].map((star) => (
                   <FiStar
                     key={star}
                     className={
-                      star <= Math.round(Number(averageRating))
+                      star <=
+                      Math.round(
+                        Number(averageRating)
+                      )
                         ? "fill-yellow-400 text-yellow-400"
                         : "text-gray-300"
                     }
                   />
                 ))}
+
               </div>
 
               <span className="font-semibold text-gray-700">
@@ -308,13 +418,17 @@ const SingleBook = () => {
               <span className="text-gray-400 text-sm">
                 ({reviews.length} reviews)
               </span>
+
             </div>
 
             <div className="h-px bg-gray-100 my-7" />
 
-            {/* INFO */}
+            {/* ================= BOOK INFO ================= */}
+
             <div className="grid grid-cols-2 gap-4 mb-7">
+
               <div className="bg-gray-50 rounded-xl p-4">
+
                 <p className="text-xs uppercase text-gray-400">
                   Category
                 </p>
@@ -322,51 +436,98 @@ const SingleBook = () => {
                 <p className="font-semibold text-gray-700 capitalize mt-1">
                   {book.category || "N/A"}
                 </p>
+
               </div>
 
               <div className="bg-gray-50 rounded-xl p-4">
+
                 <p className="text-xs uppercase text-gray-400">
                   Published
                 </p>
 
                 <p className="font-semibold text-gray-700 mt-1">
                   {book.createdAt
-                    ? new Date(book.createdAt).toLocaleDateString()
+                    ? new Date(
+                        book.createdAt
+                      ).toLocaleDateString()
                     : "N/A"}
                 </p>
+
               </div>
+
             </div>
 
-            {/* DESCRIPTION */}
+            {/* ================= DESCRIPTION ================= */}
+
             <div>
+
               <h3 className="text-lg font-bold text-gray-800 mb-2">
                 About this book
               </h3>
 
               <p className="text-gray-600 leading-relaxed">
-                {book.description || "No description available."}
+                {book.description ||
+                  "No description available."}
               </p>
+
             </div>
 
-            {/* CART */}
+            {/* ================= ADD TO CART ================= */}
+
             <motion.button
+              type="button"
               onClick={() => handleAddToCart(book)}
-              whileHover={{ y: -2 }}
-              whileTap={{ scale: 0.97 }}
-              className="w-full mt-8 bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl flex items-center justify-center gap-3 font-semibold text-lg shadow-md transition-all cursor-pointer"
+              whileHover={{
+                y: -2,
+              }}
+              whileTap={{
+                scale: 0.97,
+              }}
+              className="
+                w-full
+                mt-8
+                bg-blue-600
+                hover:bg-blue-700
+                text-white
+                py-4
+                rounded-xl
+                flex
+                items-center
+                justify-center
+                gap-3
+                font-semibold
+                text-lg
+                shadow-md
+                hover:shadow-lg
+                transition-all
+                cursor-pointer
+              "
             >
               <FiShoppingCart />
               Add to Cart
             </motion.button>
+
           </div>
         </div>
       </div>
 
-      {/* REVIEWS */}
+      {/* ================= REVIEWS ================= */}
+
       <section className="mt-12">
 
+        {/* HEADER */}
+
         <div className="mb-7">
-          <p className="text-blue-600 text-sm font-semibold uppercase tracking-wider">
+
+          <p
+            className="
+              text-blue-600
+              text-sm
+              font-semibold
+              uppercase
+              tracking-wider
+            "
+          >
             Community Reviews
           </p>
 
@@ -377,13 +538,27 @@ const SingleBook = () => {
           <p className="text-gray-500 mt-2">
             See what other readers have to say about this book.
           </p>
+
         </div>
 
-        {/* WRITE REVIEW */}
-        <div className="bg-white border border-gray-100 rounded-3xl shadow-sm p-6 mb-8">
+        {/* ================= WRITE REVIEW ================= */}
+
+        <div
+          className="
+            bg-white
+            border
+            border-gray-100
+            rounded-3xl
+            shadow-sm
+            p-6
+            mb-8
+          "
+        >
 
           <div className="flex justify-between items-center mb-5">
+
             <div>
+
               <h3 className="text-xl font-bold text-gray-800">
                 Write a Review
               </h3>
@@ -391,15 +566,19 @@ const SingleBook = () => {
               <p className="text-sm text-gray-500 mt-1">
                 Rate this book and share your thoughts.
               </p>
+
             </div>
 
             <span className="hidden sm:block text-yellow-500 font-semibold">
               {rating}/5
             </span>
+
           </div>
 
           {/* STARS */}
+
           <div className="flex gap-2 mb-5">
+
             {[1, 2, 3, 4, 5].map((star) => (
               <button
                 key={star}
@@ -408,27 +587,50 @@ const SingleBook = () => {
                 className="cursor-pointer"
               >
                 <FiStar
-                  className={`text-3xl transition ${
-                    star <= rating
-                      ? "fill-yellow-400 text-yellow-400 scale-110"
-                      : "text-gray-300 hover:text-yellow-300"
-                  }`}
+                  className={`
+                    text-3xl
+                    transition
+                    ${
+                      star <= rating
+                        ? "fill-yellow-400 text-yellow-400 scale-110"
+                        : "text-gray-300 hover:text-yellow-300"
+                    }
+                  `}
                 />
               </button>
             ))}
+
           </div>
 
-          {/* COMMENT OPTIONAL */}
+          {/* COMMENT */}
+
           <textarea
             value={comment}
-            onChange={(e) => setComment(e.target.value)}
+            onChange={(e) =>
+              setComment(e.target.value)
+            }
             placeholder="Write a review (optional)..."
             maxLength={500}
             rows={4}
-            className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 outline-none resize-none focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+            className="
+              w-full
+              px-4
+              py-3
+              rounded-xl
+              border
+              border-gray-200
+              bg-gray-50
+              outline-none
+              resize-none
+              focus:bg-white
+              focus:border-blue-500
+              focus:ring-2
+              focus:ring-blue-100
+            "
           />
 
           <div className="flex justify-between mt-2">
+
             <span className="text-xs text-gray-400">
               Optional
             </span>
@@ -436,14 +638,35 @@ const SingleBook = () => {
             <span className="text-xs text-gray-400">
               {comment.length}/500
             </span>
+
           </div>
 
           {/* SUBMIT */}
+
           <motion.button
+            type="button"
             onClick={handleSubmitReview}
             disabled={isSubmitting}
-            whileTap={{ scale: 0.98 }}
-            className="mt-5 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl flex items-center gap-2 font-semibold shadow-md disabled:bg-gray-300 disabled:cursor-not-allowed cursor-pointer"
+            whileTap={{
+              scale: 0.98,
+            }}
+            className="
+              mt-5
+              px-6
+              py-3
+              bg-blue-600
+              hover:bg-blue-700
+              text-white
+              rounded-xl
+              flex
+              items-center
+              gap-2
+              font-semibold
+              shadow-md
+              disabled:bg-gray-300
+              disabled:cursor-not-allowed
+              cursor-pointer
+            "
           >
             {isSubmitting ? (
               "Submitting..."
@@ -454,28 +677,57 @@ const SingleBook = () => {
               </>
             )}
           </motion.button>
+
         </div>
 
-        {/* REVIEW LIST */}
+        {/* ================= REVIEW LIST ================= */}
+
         <div>
+
           <div className="flex justify-between items-center mb-5">
+
             <h3 className="text-2xl font-bold text-gray-800">
               Customer Reviews
             </h3>
 
             <span className="text-sm text-gray-500">
               {reviews.length}{" "}
-              {reviews.length === 1 ? "review" : "reviews"}
+              {reviews.length === 1
+                ? "review"
+                : "reviews"}
             </span>
+
           </div>
+
+          {/* LOADING */}
 
           {reviewsLoading ? (
             <div className="py-10 text-center text-gray-500">
               Loading reviews...
             </div>
           ) : reviews.length === 0 ? (
-            <div className="bg-white border border-gray-100 rounded-2xl p-10 text-center">
-              <FiStar className="mx-auto text-4xl text-gray-300 mb-3" />
+
+            /* EMPTY */
+
+            <div
+              className="
+                bg-white
+                border
+                border-gray-100
+                rounded-2xl
+                p-10
+                text-center
+              "
+            >
+
+              <FiStar
+                className="
+                  mx-auto
+                  text-4xl
+                  text-gray-300
+                  mb-3
+                "
+              />
 
               <h4 className="text-lg font-semibold text-gray-700">
                 No reviews yet
@@ -484,26 +736,64 @@ const SingleBook = () => {
               <p className="text-gray-500 mt-1">
                 Be the first person to review this book.
               </p>
+
             </div>
+
           ) : (
+
+            /* REVIEWS */
+
             <div className="space-y-4">
+
               {reviews.map((review) => (
+
                 <motion.div
                   key={review._id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm"
+                  initial={{
+                    opacity: 0,
+                    y: 10,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+                  className="
+                    bg-white
+                    border
+                    border-gray-100
+                    rounded-2xl
+                    p-5
+                    shadow-sm
+                  "
                 >
+
                   <div className="flex justify-between">
 
+                    {/* USER */}
+
                     <div className="flex items-center gap-3">
-                      <div className="w-11 h-11 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold">
+
+                      <div
+                        className="
+                          w-11
+                          h-11
+                          rounded-full
+                          bg-blue-100
+                          text-blue-600
+                          flex
+                          items-center
+                          justify-center
+                          font-bold
+                        "
+                      >
                         {review.userName
                           ?.charAt(0)
-                          ?.toUpperCase() || "U"}
+                          ?.toUpperCase() ||
+                          "U"}
                       </div>
 
                       <div>
+
                         <h4 className="font-semibold text-gray-800">
                           {review.userName}
                         </h4>
@@ -515,50 +805,78 @@ const SingleBook = () => {
                               ).toLocaleDateString()
                             : ""}
                         </p>
+
                       </div>
+
                     </div>
 
                     {/* DELETE */}
+
                     {currentUser &&
-                      (currentUser.uid === review.userId ||
-                        currentUser.email === review.userEmail) && (
+                      (currentUser.uid ===
+                        review.userId ||
+                        currentUser.email ===
+                          review.userEmail) && (
+
                         <button
+                          type="button"
                           onClick={() =>
-                            handleDeleteReview(review._id)
+                            handleDeleteReview(
+                              review._id
+                            )
                           }
-                          className="text-gray-400 hover:text-red-500 cursor-pointer"
+                          className="
+                            text-gray-400
+                            hover:text-red-500
+                            cursor-pointer
+                          "
                           title="Delete review"
                         >
                           <FiTrash2 />
                         </button>
+
                       )}
+
                   </div>
 
                   {/* RATING */}
+
                   <div className="flex gap-1 mt-4">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <FiStar
-                        key={star}
-                        className={
-                          star <= review.rating
-                            ? "fill-yellow-400 text-yellow-400"
-                            : "text-gray-300"
-                        }
-                      />
-                    ))}
+
+                    {[1, 2, 3, 4, 5].map(
+                      (star) => (
+                        <FiStar
+                          key={star}
+                          className={
+                            star <=
+                            review.rating
+                              ? "fill-yellow-400 text-yellow-400"
+                              : "text-gray-300"
+                          }
+                        />
+                      )
+                    )}
+
                   </div>
 
                   {/* COMMENT */}
+
                   {review.comment && (
                     <p className="text-gray-600 leading-relaxed mt-3">
                       {review.comment}
                     </p>
                   )}
+
                 </motion.div>
+
               ))}
+
             </div>
+
           )}
+
         </div>
+
       </section>
     </motion.main>
   );

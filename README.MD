@@ -1,6 +1,12 @@
 # 📚 BookNest — Online Bookstore
 
-BookNest is a full-stack online bookstore web application built using the MERN stack. It provides a complete online shopping experience for users along with a dedicated admin dashboard for managing books, orders, reviews, and other store-related operations.
+BookNest is a full-stack online bookstore web application built using the MERN stack.
+
+The application allows users to browse books, search and filter books, view book details, add books to the shopping cart, place orders, and view their order history.
+
+It also includes an admin panel for managing books, monitoring orders, and managing the bookstore.
+
+---
 
 ## 🌐 Live Demo
 
@@ -139,9 +145,47 @@ The application stores information such as:
 
 ## 🖼️ Book Image Upload
 
-Book cover images can be uploaded through the admin dashboard.
+## 📸 Screenshots
 
-The backend uses **Multer** to handle image uploads and process uploaded book cover files.
+### 🏠 Home Page
+
+![BookNest Home Page](screenshots/home.png)
+
+### 📚 All Books
+
+![All Books](screenshots/all-books.png)
+
+### 📖 Book Details
+
+![Book Details](screenshots/book-details.png)
+
+### 🛒 Shopping Cart
+
+![Shopping Cart](screenshots/shopping-cart.png)
+
+### 💳 Checkout
+
+![Checkout](screenshots/checkout.png)
+
+### 📦 Order Details
+
+![Order Details](screenshots/order-details.png)
+
+### ✅ Order Confirmation
+
+![Order Confirmation](screenshots/order-confirmed.png)
+
+### 📊 Admin Dashboard
+
+![Admin Dashboard](screenshots/admin-dashboard.png)
+
+### ➕ Admin Add New Book
+
+![Admin Add New Book](screenshots/admin-add-book.png)
+
+### 🗂️ Admin Manage Books
+
+![Admin Manage Books](screenshots/admin-manage-books.png)
 
 ---
 

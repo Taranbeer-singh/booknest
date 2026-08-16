@@ -9,7 +9,10 @@ require('dotenv').config()
 // middleware
 app.use(express.json());
 app.use(cors({
-    origin: ['http://localhost:5173'],
+    origin: [
+        'http://localhost:5173',
+        'https://booknest-1-8aqo.onrender.com'
+    ],
     credentials: true
 }))
 
